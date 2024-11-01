@@ -1,5 +1,6 @@
 package de.sunnix.sdso;
 
+import javax.xml.crypto.dsig.keyinfo.KeyValue;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,20 +16,20 @@ import java.util.function.IntFunction;
 @SuppressWarnings("unchecked")
 public class DataSaveObject {
 
-    private static final byte TYPE_BYTE = 0;
-    private static final byte TYPE_SHORT = 1;
-    private static final byte TYPE_INT = 2;
-    private static final byte TYPE_LONG = 3;
-    private static final byte TYPE_FLOAT = 4;
-    private static final byte TYPE_DOUBLE = 5;
-    private static final byte TYPE_BOOL = 6;
-    private static final byte TYPE_CHAR = 7;
-    private static final byte TYPE_STRING = 8;
-    private static final byte TYPE_OBJECT = 9;
+    public static final byte TYPE_BYTE = 0;
+    public static final byte TYPE_SHORT = 1;
+    public static final byte TYPE_INT = 2;
+    public static final byte TYPE_LONG = 3;
+    public static final byte TYPE_FLOAT = 4;
+    public static final byte TYPE_DOUBLE = 5;
+    public static final byte TYPE_BOOL = 6;
+    public static final byte TYPE_CHAR = 7;
+    public static final byte TYPE_STRING = 8;
+    public static final byte TYPE_OBJECT = 9;
     private static final byte TYPE_OBJECT_START = 10;
     private static final byte TYPE_OBJECT_END = 11;
-    private static final byte TYPE_ARRAY = 12;
-    private static final byte TYPE_DATA = 13;
+    public static final byte TYPE_ARRAY = 12;
+    public static final byte TYPE_DATA = 13;
 
     private final Map<String, Object> data = new HashMap<>();
 
@@ -489,6 +490,49 @@ public class DataSaveObject {
     // FUNCTIONS
     // ========================================================
 
+    public boolean hasKey(String key){
+        return data.containsKey(key);
+    }
+
+    public String[] getKeys(){
+        return data.keySet().toArray(String[]::new);
+    }
+
+    public int getType(String key){
+        var value = data.get(key);
+        if(value == null)
+            return -1;
+        if(value instanceof Byte)
+            return TYPE_BYTE;
+        if(value instanceof Short)
+            return TYPE_SHORT;
+        if(value instanceof Integer)
+            return TYPE_INT;
+        if(value instanceof Long)
+            return TYPE_LONG;
+        if(value instanceof Float)
+            return TYPE_FLOAT;
+        if(value instanceof Double)
+            return TYPE_DOUBLE;
+        if(value instanceof Boolean)
+            return TYPE_BOOL;
+        if(value instanceof Character)
+            return TYPE_CHAR;
+        if(value instanceof String)
+            return TYPE_STRING;
+        if(value instanceof DataSaveObject)
+            return TYPE_OBJECT;
+        if(value instanceof DataSaveArray<?>)
+            return TYPE_ARRAY;
+        if(value instanceof byte[])
+            return TYPE_DATA;
+        return -1;
+    }
+
+    public List<Map.Entry<String, Object>> getData(){
+        return data.entrySet().stream().toList();
+    }
+
     public OutputStream save() throws IOException {
         try (var stream = new ByteArrayOutputStream()) {
             save(stream);
@@ -698,7 +742,7 @@ public class DataSaveObject {
         return b.toString();
     }
 
-    private static class DataSaveArray<T> {
+    public final static class DataSaveArray<T> {
 
         private final byte DATATYPE;
         private List<T> list;

@@ -9,6 +9,8 @@
         <version>1.0</version>
     </parent>
 
+    <artifactId>DataSaveObject</artifactId>
+
     <build>
         <sourceDirectory>src</sourceDirectory>
         <plugins>
@@ -25,11 +27,6 @@
                         <configuration>
                             <finalName>${project.artifactId}-${project.version}</finalName>
                             <outputDirectory>${project.basedir}/../out</outputDirectory>
-                            <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>de.sunnix.sdso.Viewer</mainClass>
-                                </transformer>
-                            </transformers>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                             <shadedArtifactAttached>false</shadedArtifactAttached>
                         </configuration>
@@ -39,21 +36,10 @@
         </plugins>
     </build>
 
-    <artifactId>DSOEditor</artifactId>
-
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
-    <dependencies>
-        <dependency>
-            <groupId>de.sunnix.sdso</groupId>
-            <artifactId>DataSaveObject</artifactId>
-            <version>1.0</version>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
 
 </project>

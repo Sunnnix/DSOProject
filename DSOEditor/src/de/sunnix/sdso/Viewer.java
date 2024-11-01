@@ -1,4 +1,4 @@
-import de.sunnix.sdso.DataSaveObject;
+package de.sunnix.sdso;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
